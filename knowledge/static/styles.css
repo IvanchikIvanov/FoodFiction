@@ -273,3 +273,24 @@ h1{font-weight:900;font-size:62px;line-height:1;letter-spacing:-2px}h1 em{font-s
 .composer-area{background:linear-gradient(180deg,rgba(15,13,11,0),rgba(15,13,11,.9) 40%)}
 @media(max-width:540px){.voice-start{width:170px;height:170px}}
 @media(prefers-reduced-motion:reduce){.voice-start.is-recording{animation:none}}
+
+/* Volumetric voice orb: a lit gold sphere inside a canvas ring that follows the speaker's voice (--level is 0..1, set from app.js). */
+.voice-orb{--level:0;position:relative;width:360px;height:360px;display:grid;place-items:center}
+.voice-viz{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.voice-start{position:relative;z-index:1;width:176px;height:176px;overflow:hidden;
+  background:radial-gradient(circle at 34% 26%,#fff7d9 0,#ffd75a 14%,#f8ad00 40%,#c27a00 72%,#6b3f00 100%);
+  box-shadow:inset -16px -22px 34px rgba(70,35,0,.6),inset 12px 14px 26px rgba(255,255,255,.35),0 34px 60px -18px rgba(0,0,0,.85),
+    0 0 calc(36px + var(--level)*90px) calc(var(--level)*14px) rgba(248,173,0,calc(.32 + var(--level)*.45));
+  transform:scale(calc(1 + var(--level)*.12));transition:transform .08s linear,scale .15s,box-shadow .12s;animation:orb-breathe 4.5s ease-in-out infinite}
+.voice-start:hover{transform:scale(calc(1 + var(--level)*.12));scale:1.04;filter:none}
+.voice-start:active{transform:scale(calc(1 + var(--level)*.12));scale:.96}
+.voice-start::before{inset:-20%;padding:0;border-radius:50%;background:conic-gradient(from 0deg,transparent 0 30%,rgba(255,255,255,.28) 40%,transparent 52% 80%,rgba(255,240,200,.18) 88%,transparent 96%);-webkit-mask:none;mask:none;mix-blend-mode:overlay;animation:orb-spin 9s linear infinite}
+.voice-start::after{content:"";position:absolute;left:20%;top:11%;width:38%;height:24%;border-radius:50%;background:radial-gradient(closest-side,rgba(255,255,255,.85),rgba(255,255,255,0));transform:rotate(-24deg);filter:blur(1px);pointer-events:none}
+.voice-start .voice-icon{position:relative;z-index:1;color:#2b1700;filter:drop-shadow(0 1px 0 rgba(255,236,170,.75)) drop-shadow(0 -1px 1px rgba(60,30,0,.45));transform:scale(calc(1 + var(--level)*.08))}
+.voice-start .voice-icon .icon{width:64px;height:64px;stroke-width:1.7}
+.voice-start.is-recording .voice-icon{animation:none}
+.voice-start.is-recording{background:radial-gradient(circle at 34% 26%,#fffbe8 0,#ffe27a 16%,#ffbb1a 42%,#d48800 74%,#7a4800 100%);animation:none}
+@keyframes orb-spin{to{transform:rotate(1turn)}}
+@keyframes orb-breathe{50%{box-shadow:inset -16px -22px 34px rgba(70,35,0,.6),inset 12px 14px 26px rgba(255,255,255,.35),0 34px 60px -18px rgba(0,0,0,.85),0 0 58px 6px rgba(248,173,0,.42)}}
+@media(max-width:540px){.voice-orb{width:300px;height:300px}.voice-start{width:150px;height:150px}.voice-start .voice-icon .icon{width:54px;height:54px}}
+@media(prefers-reduced-motion:reduce){.voice-start,.voice-start::before{animation:none}}

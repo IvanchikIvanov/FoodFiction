@@ -324,8 +324,116 @@ async function ask(question) {
   }
 }
 
+// Live mic level for the voice orb. Recognition runs in the browser's speech service, so a parallel
+// getUserMedia stream feeds an analyser purely for the visual; if it is unavailable the orb animates on its own.
+const meter = {stream: null, ctx: null, analyser: null, data: null, level: 0, phase: 0};
+const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+async function startMeter(recognition) {
+  if (!navigator.mediaDevices?.getUserMedia) return;
+  try {
+    meter.ctx ||= new (window.AudioContext || window.webkitAudioContext)();
+    meter.ctx.resume();
+    const stream = await navigator.mediaDevices.getUserMedia({audio: {echoCancellation: true, noiseSuppression: true}});
+    if (state.recognition !== recognition) { stream.getTracks().forEach((track) => track.stop()); return; }
+    stopMeter();
+    const analyser = meter.ctx.createAnalyser();
+    analyser.fftSize = 512;
+    analyser.smoothingTimeConstant = 0.72;
+    meter.ctx.createMediaStreamSource(stream).connect(analyser);
+    Object.assign(meter, {stream, analyser, data: new Uint8Array(analyser.frequencyBinCount)});
+  } catch { /* the orb falls back to a synthetic pulse */ }
+}
+
+function stopMeter() {
+  meter.stream?.getTracks().forEach((track) => track.stop());
+  Object.assign(meter, {stream: null, analyser: null, data: null});
+}
+
+function drawOrb(now) {
+  requestAnimationFrame(drawOrb);
+  const canvas = $("voice-viz");
+  const size = canvas.clientWidth;
+  if (!size) return;
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  if (canvas.width !== Math.round(size * dpr)) canvas.width = canvas.height = Math.round(size * dpr);
+  const ctx = canvas.getContext("2d");
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, size, size);
+
+  const t = now / 1000;
+  const points = 72;
+  const amps = new Float32Array(points);
+  let target = 0;
+  if (meter.analyser) {
+    meter.analyser.getByteFrequencyData(meter.data);
+    const usable = Math.floor(meter.data.length * 0.45);
+    for (let i = 0; i < points; i += 1) {
+      const mirrored = Math.min(i, points - i) / (points / 2);
+      const value = meter.data[2 + Math.floor(mirrored * (usable - 2))] / 255;
+      amps[i] = value * value;
+      target += value;
+    }
+    target = Math.min(1, Math.max(0, (target / points - 0.12) * 2.6));
+  } else if (state.listening) {
+    target = 0.28 + 0.18 * Math.sin(t * 5.2) * Math.sin(t * 1.7);
+    for (let i = 0; i < points; i += 1) amps[i] = 0.25 + 0.25 * Math.sin(i * 0.9 + t * 7);
+  }
+  meter.level += (target - meter.level) * (target > meter.level ? 0.4 : 0.09);
+  $("voice-orb").style.setProperty("--level", meter.level.toFixed(3));
+
+  const motion = reducedMotion.matches ? 0 : 1;
+  meter.phase += motion * (0.004 + meter.level * 0.03);
+  const center = size / 2;
+  const base = $("voice-start").offsetWidth / 2 + 12;
+  const reach = size / 2 - base - 8;
+  const layers = [
+    {offset: 0, gain: 1, alpha: 0.95, width: 2.2, spin: 1},
+    {offset: 7, gain: 0.75, alpha: 0.5, width: 1.6, spin: -1.3},
+    {offset: 15, gain: 0.55, alpha: 0.24, width: 1.2, spin: 0.7}
+  ];
+  ctx.lineJoin = "round";
+  layers.forEach((layer, index) => {
+    const radii = [];
+    for (let i = 0; i < points; i += 1) {
+      const angle = (i / points) * Math.PI * 2;
+      const idle = motion * (2.2 + index) * Math.sin(angle * (3 + index) + t * (0.9 + index * 0.35) + index);
+      const voice = (amps[(i + index * 5) % points] * 0.75 + meter.level * 0.35) * reach * layer.gain;
+      radii.push(base + layer.offset + idle + voice);
+    }
+    const rotate = meter.phase * layer.spin;
+    const at = (i) => {
+      const angle = ((i % points) / points) * Math.PI * 2 + rotate;
+      return [center + Math.cos(angle) * radii[i % points], center + Math.sin(angle) * radii[i % points]];
+    };
+    ctx.beginPath();
+    const [x0, y0] = at(0), [x1, y1] = at(1);
+    ctx.moveTo((x0 + x1) / 2, (y0 + y1) / 2);
+    for (let i = 1; i <= points; i += 1) {
+      const [cx, cy] = at(i), [nx, ny] = at(i + 1);
+      ctx.quadraticCurveTo(cx, cy, (cx + nx) / 2, (cy + ny) / 2);
+    }
+    ctx.closePath();
+    const gradient = ctx.createLinearGradient(0, 0, size, size);
+    gradient.addColorStop(0, `rgba(255, 226, 140, ${layer.alpha})`);
+    gradient.addColorStop(0.5, `rgba(248, 173, 0, ${layer.alpha})`);
+    gradient.addColorStop(1, `rgba(196, 110, 0, ${layer.alpha * 0.8})`);
+    if (index === 0) {
+      ctx.fillStyle = `rgba(248, 173, 0, ${0.05 + meter.level * 0.12})`;
+      ctx.fill();
+    }
+    ctx.shadowColor = "rgba(248, 173, 0, .8)";
+    ctx.shadowBlur = index === 0 ? 10 + meter.level * 18 : 0;
+    ctx.strokeStyle = gradient;
+    ctx.lineWidth = layer.width;
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+  });
+}
+
 function recordingState(listening) {
   state.listening = listening;
+  if (!listening) stopMeter();
   $("recording-status").hidden = !listening;
   $("voice-start").classList.toggle("is-recording", listening);
   $("voice-start").querySelector("strong").textContent = listening ? "Слушаю ваш вопрос…" : "Задать вопрос голосом";
@@ -363,7 +471,7 @@ function startDictation() {
     const messages = {"not-allowed": "Разрешите доступ к микрофону в настройках браузера или напишите вопрос.", "no-speech": "Речь не распознана. Попробуйте ещё раз или напишите вопрос.", "language-not-supported": "Диктовка на этом языке недоступна в вашем браузере. Можно ввести вопрос текстом.", "network": "Сервис диктовки недоступен. Проверьте соединение или напишите вопрос."};
     if (event.error !== "aborted") notify(messages[event.error] || "Не удалось распознать речь. Попробуйте ещё раз или напишите вопрос.");
   };
-  try { recognition.start(); } catch { recordingState(false); state.recognition = null; notify("Не удалось включить микрофон. Попробуйте ещё раз."); }
+  try { recognition.start(); startMeter(recognition); } catch { recordingState(false); state.recognition = null; notify("Не удалось включить микрофон. Попробуйте ещё раз."); }
 }
 
 $("question-form").addEventListener("submit", (event) => { event.preventDefault(); ask($("question").value.trim()); });
@@ -412,6 +520,7 @@ $("logout").addEventListener("click", async () => {
   catch { notify("Не удалось выйти. Проверьте соединение и повторите попытку."); }
 });
 window.addEventListener("pagehide", () => { state.recognition?.abort(); stopSpeech(); });
+requestAnimationFrame(drawOrb);
 if ("speechSynthesis" in window) window.speechSynthesis.getVoices();
 if (!Recognition) $("voice-caption").textContent = "В этом браузере доступен текстовый ввод";
 refreshStatus().catch(() => { $("source-state").textContent = "Нет подключения"; notify("Не удалось подключиться к помощнику. Проверьте соединение и обновите страницу."); });
