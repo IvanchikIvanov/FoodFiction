@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f8ad00">
+  <title>Помощник — Food Fiction</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <link rel="stylesheet" href="/assets/brand-fonts.css">
+  <link rel="stylesheet" href="/assets/styles.css">
+  <script src="/assets/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#question">Перейти к вопросу</a>
+  <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H5l-3 3V11.5A7.5 7.5 0 0 1 9.5 4h3a7.5 7.5 0 0 1 7.5 7.5Z"/><path d="M7 10h8M7 14h5"/></symbol>
+    <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="13" rx="3"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3M8 22h8"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="m5 12 7-7 7 7M12 5v14"/></symbol>
+    <symbol id="i-right" viewBox="0 0 24 24"><path d="M5 12h14m-5-5 5 5-5 5"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 5v15M3 4h5a4 4 0 0 1 4 2 4 4 0 0 1 4-2h5v15h-5a5 5 0 0 0-4 2 5 5 0 0 0-4-2H3Z"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/></symbol>
+    <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 9a3 3 0 0 1 6 0c0 2-3 2-3 4m0 3v.1"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+    <symbol id="i-volume" viewBox="0 0 24 24"><path d="m11 4-6 5H2v6h3l6 5ZM15 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V3H3v13h5"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 2H5v20h14V7l-5-5Zm0 0v6h5M8 12h8M8 16h6"/></symbol>
+  </svg>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Навигация">
+      <a class="brand" href="/" aria-label="Food Fiction — главная">
+        <img class="brand-logo" src="/assets/brand/food-fiction-white.svg" alt="Food Fiction — фабрики-кухни" width="379" height="155">
+      </a>
+      <button class="new-chat" id="new-chat"><svg class="icon"><use href="#i-plus"/></svg>Новый вопрос</button>
+      <nav class="navigation">
+        <button class="nav-link selected" id="home-nav" aria-current="page"><svg class="icon"><use href="#i-chat"/></svg>Помощник</button>
+        <button class="nav-link" id="help-nav"><svg class="icon"><use href="#i-help"/></svg>Как это работает</button>
+      </nav>
+      <div class="sidebar-note">
+        <svg class="icon"><use href="#i-book"/></svg>
+        <p>Инструкции —<br>всегда под рукой.</p>
+        <span>Для офиса и производства</span>
+      </div>
+      <div class="sidebar-bottom">
+        <div class="source-state"><span class="state-dot"></span><span id="source-state">Проверяем подключение</span></div>
+        <button class="text-button" id="logout" hidden>Выйти из рабочей базы</button>
+        <div class="sidebar-footnote">Помощник Food Fiction</div>
+      </div>
+    </aside>
+    <button class="sidebar-scrim" id="sidebar-scrim" aria-label="Закрыть меню" hidden></button>
+    <div class="main-shell">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="icon-button mobile-menu" id="menu-button" aria-label="Открыть меню" aria-expanded="false" aria-controls="sidebar"><svg class="icon"><use href="#i-menu"/></svg></button>
+          <span class="desktop-breadcrumb">База знаний <span>/</span></span><strong>Помощник</strong><img class="topbar-logo" src="/assets/brand/food-fiction-compact.svg" alt="Food Fiction" width="379" height="121">
+        </div>
+        <div class="language-control">
+          <svg class="icon"><use href="#i-globe"/></svg>
+          <label class="sr-only" for="language">Язык ответов и голосового ввода</label>
+          <select id="language" title="Язык ответов и голосового ввода">
+            <option value="ru-RU">Русский</option><option value="uz-UZ">O‘zbekcha</option>
+            <option value="tg-TJ">Тоҷикӣ</option><option value="ky-KG">Кыргызча</option>
+            <option value="kk-KZ">Қазақша</option><option value="en-US">English</option>
+            <option value="hy-AM">Հայերեն</option><option value="az-AZ">Azərbaycanca</option>
+            <option value="tr-TR">Türkçe</option><option value="zh-CN">中文</option>
+          </select>
+        </div>
+      </header>
+      <div class="mode-banner" id="mode-banner" hidden><span class="mode-tag">Предпросмотр</span><span>Нейросеть использует учебные материалы и интернет. Рабочая база Food Fiction пока не подключена.</span></div>
+      <main class="workspace" id="workspace">
+        <section class="welcome" id="welcome" aria-labelledby="welcome-title">
+          <div class="welcome-mark" aria-hidden="true"><svg class="icon"><use href="#i-book"/></svg>База знаний Food Fiction</div>
+          <h1 id="welcome-title">Что вы хотите <em>узнать?</em></h1>
+          <p class="intro">О приготовлении блюд и работе на производстве.<br class="desktop-break"> Ответим по материалам Food Fiction и покажем источник.</p>
+          <button class="voice-start" id="voice-start"><span class="voice-icon"><svg class="icon"><use href="#i-mic"/></svg></span><span><strong>Задать вопрос голосом</strong><small>Нажмите и говорите</small></span><span class="voice-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></button>
+          <p class="voice-caption" id="voice-caption">Скажите вопрос — он отправится автоматически. Или напишите его внизу</p>
+          <section class="examples" aria-label="Примеры вопросов">
+            <div class="examples-heading"><span>Например, можно спросить</span><span class="example-count">4 темы</span></div>
+            <div class="example-list">
+              <button type="button" class="example" data-question="Как часто менять одноразовые перчатки?"><span class="example-num" aria-hidden="true">01</span><span>Как часто менять одноразовые перчатки?</span><svg class="icon"><use href="#i-right"/></svg></button>
+              <button type="button" class="example" data-question="Сколько курицы и соуса нужно для салата Цезарь 250 г?"><span class="example-num" aria-hidden="true">02</span><span>Сколько курицы и соуса нужно для салата Цезарь 250 г?</span><svg class="icon"><use href="#i-right"/></svg></button>
+              <button type="button" class="example" data-question="При какой температуре и сколько минут запекать тыкву кубиком для салатов?"><span class="example-num" aria-hidden="true">03</span><span>При какой температуре и сколько минут запекать тыкву кубиком для салатов?</span><svg class="icon"><use href="#i-right"/></svg></button>
+              <button type="button" class="example" data-question="Какую насадку Robot Coupe использовать для моркови соломкой 2 мм?"><span class="example-num" aria-hidden="true">04</span><span>Какую насадку Robot Coupe использовать для моркови соломкой 2 мм?</span><svg class="icon"><use href="#i-right"/></svg></button>
+            </div>
+          </section>
+        </section>
+        <section class="conversation" id="conversation" aria-label="Вопросы и найденные инструкции" hidden></section>
+        <div class="inline-notice" id="notice" role="status" hidden></div>
+        <section class="login-panel" id="login-panel" hidden aria-labelledby="login-title">
+          <h2 id="login-title">Вход в базу Food Fiction</h2>
+          <p>Введите код доступа, который выдал ответственный сотрудник.</p>
+          <form id="login-form"><label for="access-code">Код доступа</label><div class="login-row"><input type="password" id="access-code" autocomplete="current-password" required maxlength="256"><button class="primary-button" type="submit">Войти</button></div></form>
+          <p class="form-error" id="login-error" role="alert" hidden></p>
+        </section>
+      </main>
+      <footer class="composer-area">
+        <div class="recording-status" id="recording-status" role="status" hidden><span class="recording-dot"></span><span>Слушаю. Говорите на выбранном языке.</span><button id="stop-recording" class="text-button">Завершить</button></div>
+        <form class="composer" id="question-form">
+          <label for="question" class="sr-only">Ваш вопрос</label>
+          <textarea id="question" rows="1" maxlength="1000" placeholder="Напишите ваш вопрос…" enterkeyhint="send"></textarea>
+          <div class="composer-actions"><button type="button" class="icon-button" id="mic-button" aria-label="Продиктовать вопрос"><svg class="icon"><use href="#i-mic"/></svg></button><button type="submit" id="send-button" class="send-button" aria-label="Отправить вопрос" disabled><svg class="icon"><use href="#i-arrow"/></svg></button></div>
+        </form>
+        <p class="composer-note"><svg class="icon"><use href="#i-book"/></svg><span>Отвечаем по базе знаний Food Fiction. Важные сведения сверяйте с источниками.</span></p>
+      </footer>
+    </div>
+  </div>
+  <dialog id="help-dialog" aria-labelledby="help-title">
+    <div class="dialog-header"><h2 id="help-title">Как пользоваться помощником</h2><button class="icon-button dialog-close" aria-label="Закрыть"><svg class="icon"><use href="#i-close"/></svg></button></div>
+    <div class="dialog-body"><ol class="help-steps"><li><strong>Задайте вопрос голосом или текстом</strong><p>Выберите язык ответов. Можно написать вопрос на любом языке или нажать на микрофон для диктовки на выбранном языке.</p></li><li><strong>Получите ответ</strong><p>Помощник отвечает на выбранном языке по подключённым материалам Food Fiction и уточняет вопрос при необходимости.</p></li><li><strong>Проверьте источники</strong><p>Номер источника в ответе открывает исходный документ. Его текст сохраняется на языке оригинала.</p></li></ol><p class="help-note">Ответ нейросети может содержать ошибку — для важных действий проверяйте первоисточник. Диктовка зависит от браузера и может использовать его внешний сервис. История диалога хранится только в открытой вкладке.</p></div>
+  </dialog>
+  <dialog id="source-dialog" class="source-dialog" aria-labelledby="source-title"><div class="dialog-header"><div><span class="source-kicker">Текст инструкции</span><h2 id="source-title">Источник</h2></div><button class="icon-button dialog-close" aria-label="Закрыть"><svg class="icon"><use href="#i-close"/></svg></button></div><div class="dialog-body" id="source-body"></div></dialog>
+  <div class="sr-only" role="status" aria-live="polite" id="announcer"></div>
+</body>
+</html>

@@ -1,0 +1,8 @@
+*.pdf binary
+*.PDF binary
+*.zip binary
+*.ttf binary
+*.woff binary
+*.woff2 binary
+*.patch whitespace=-blank-at-eol
+knowledge/static/fonts/*OFL.txt whitespace=-blank-at-eol

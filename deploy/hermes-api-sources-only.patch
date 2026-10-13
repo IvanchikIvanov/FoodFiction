@@ -1,0 +1,12 @@
+--- a/hermes_cli/tools_config.py
++++ b/hermes_cli/tools_config.py
+@@ -1292,6 +1292,9 @@
+     include_default_mcp_servers: bool = True,
+ ) -> Set[str]:
+     """Resolve which individual toolset names are enabled for a platform."""
++    # Food Fiction: prohibit automatic searches, plugins and MCP for this API.
++    if platform == "api_server" and config.get("api_server_sources_only") is True:
++        return set()
+     from toolsets import resolve_toolset, TOOLSETS
+ 
+     platform_toolsets = config.get("platform_toolsets") or {}

@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "roma-knowledge"
+version = "0.1.0"
+description = "Bitrix24 knowledge synchronizer for a corporate assistant"
+requires-python = ">=3.11"
+dependencies = ["ddgs==9.16.0", "fastapi==0.136.1", "httpx==0.27.2", "uvicorn==0.46.0", "pypdf==6.7.5", "faster-whisper==1.2.1", "pillow==12.1.0"]
+
+[project.optional-dependencies]
+test = ["pytest==9.0.2"]
+
+[tool.setuptools.packages.find]
+include = ["knowledge*"]
+
+[tool.setuptools.package-data]
+knowledge = ["static/*", "static/fonts/*", "static/brand/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

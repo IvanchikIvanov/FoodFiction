@@ -1,0 +1,15 @@
+{
+  "portal_url": "https://YOUR-COMPANY.bitrix24.ru",
+  "user_id": 1,
+  "sources": [
+    {"kind": "disk", "id": 123},
+    {"kind": "note", "id": 456}
+  ],
+  "web_scopes": ["disk:123", "note:456"],
+  "poll_seconds": 300,
+  "max_stale_seconds": 900,
+  "require_review": true,
+  "web_cookie_secure": true,
+  "download_hosts": [],
+  "database": "data/knowledge.sqlite3"
+}

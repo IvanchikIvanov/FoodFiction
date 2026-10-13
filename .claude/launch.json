@@ -1,0 +1,6 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "preview", "url": "http://127.0.0.1:8081", "port": 8081 }
+  ]
+}

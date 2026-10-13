@@ -1,0 +1,27 @@
+[Unit]
+Description=Food Fiction knowledge assistant
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/Rom
+EnvironmentFile=/etc/food-fiction.env
+ExecStart=/root/Rom/.venv311/bin/python -m uvicorn knowledge.app:create_app --factory --host 127.0.0.1 --port 8081 --workers 1
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=20
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/root/Rom/data
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+
+[Install]
+WantedBy=multi-user.target
