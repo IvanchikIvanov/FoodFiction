@@ -254,3 +254,22 @@ h1{font-weight:900;font-size:62px;line-height:1;letter-spacing:-2px}h1 em{font-s
 @media(max-width:360px){h1{font-size:38px}.voice-start strong{font-size:20px}}
 
 .topbar-logo{display:none}@media(max-width:760px){.topbar-left strong{display:none}.topbar-logo{display:block;width:116px;height:auto}}
+
+/* Minimal main area: sidebar stays, one voice button on an illustrated dark field. */
+:root{--bg:#141210}
+.main-shell{background:radial-gradient(480px 420px at 50% 42%,rgba(248,173,0,.16),transparent 70%),url("/assets/brand/kitchen-pattern.svg") center/420px,linear-gradient(180deg,#1a1714,#0f0d0b)}
+.welcome-mark,#welcome-title,.intro,.voice-caption,.examples,.mode-banner,.composer-note{display:none!important}
+.welcome{min-height:calc(100dvh - 300px);display:flex;align-items:center;justify-content:center;padding:0}
+.voice-start{width:200px;height:200px;min-height:0;margin:0;padding:0;border-radius:50%;justify-content:center;background:#f8ad00;border:0;box-shadow:0 0 0 14px rgba(248,173,0,.14),0 0 0 30px rgba(248,173,0,.06),0 30px 80px -10px rgba(248,173,0,.45);transition:transform .15s,box-shadow .2s}
+.voice-start:hover{transform:scale(1.03)}
+.voice-start:active{transform:scale(.97)}
+.voice-start .voice-icon{width:auto;height:auto;background:none;box-shadow:none;color:#000000}
+.voice-start .voice-icon .icon{width:72px;height:72px}
+.voice-start>span:not(.voice-icon){position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+.voice-start.is-recording{background:#ffffff;animation:ff-pulse 1.4s ease-in-out infinite}
+@keyframes ff-pulse{50%{box-shadow:0 0 0 26px rgba(248,173,0,.2),0 0 0 52px rgba(248,173,0,.07)}}
+.topbar{background:rgba(15,13,11,.7);border-bottom-color:rgba(255,255,255,.08);color:#ffffff}
+.topbar .desktop-breadcrumb{color:rgba(255,255,255,.55)}
+.composer-area{background:linear-gradient(180deg,rgba(15,13,11,0),rgba(15,13,11,.9) 40%)}
+@media(max-width:540px){.voice-start{width:170px;height:170px}}
+@media(prefers-reduced-motion:reduce){.voice-start.is-recording{animation:none}}

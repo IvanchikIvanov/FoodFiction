@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="420" viewBox="0 0 420 420" fill="none" stroke="#f8ad00" stroke-opacity=".16" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <!-- whisk -->
+  <g transform="translate(46 34) rotate(-28)">
+    <path d="M0 70V110"/><rect x="-5" y="104" width="10" height="26" rx="5"/>
+    <path d="M0 70C-22 40-20 6 0 0 20 6 22 40 0 70Z"/><path d="M0 70C-10 40-9 10 0 0 9 10 10 40 0 70Z"/><path d="M0 0V70"/>
+  </g>
+  <!-- chef hat -->
+  <g transform="translate(196 30)">
+    <path d="M14 58C-4 58-8 30 10 26 10 8 34 2 42 16 50 2 74 8 72 26 90 30 86 58 68 58"/>
+    <path d="M14 58V78H68V58"/><path d="M14 70H68"/>
+  </g>
+  <!-- chef knife -->
+  <g transform="translate(330 70) rotate(38)">
+    <path d="M0 0C14 4 18 30 16 80H-2Z"/><path d="M-2 80H16"/><rect x="0" y="82" width="14" height="42" rx="4"/><circle cx="7" cy="94" r="1.5"/><circle cx="7" cy="110" r="1.5"/>
+  </g>
+  <!-- pot -->
+  <g transform="translate(30 210)">
+    <path d="M8 22H92V70C92 82 84 88 72 88H28C16 88 8 82 8 70Z"/><path d="M0 22H100"/><path d="M8 34H-6M92 34H106"/>
+    <path d="M34 14C34 4 66 4 66 14"/><path d="M36 -6C32 -14 40 -18 36 -26M50 -6C46 -14 54 -18 50 -26M64 -6C60 -14 68 -18 64 -26"/>
+  </g>
+  <!-- carrot -->
+  <g transform="translate(240 200) rotate(24)">
+    <path d="M0 0C14 -6 28 -6 34 6L10 92C8 98 2 98 0 92L-10 18C-10 8 -6 2 0 0Z"/>
+    <path d="M6 22L18 26M2 46L14 50M4 70L12 72"/>
+    <path d="M18 -2C14 -18 20 -26 26 -30M18 -2C26 -14 38 -14 44 -12M18 -2C6 -12 2 -24 4 -32"/>
+  </g>
+  <!-- fork -->
+  <g transform="translate(372 250) rotate(-14)">
+    <path d="M-12 0V26C-12 36 12 36 12 26V0M0 0V30M0 34V110"/><rect x="-5" y="70" width="10" height="44" rx="5"/>
+  </g>
+  <!-- ladle -->
+  <g transform="translate(150 320) rotate(-60)">
+    <path d="M0 0V-70C0 -78 10 -78 10 -70"/><path d="M-22 0A22 22 0 0 0 22 0Z"/>
+  </g>
+  <!-- tomato / pepper dots -->
+  <g transform="translate(290 360)">
+    <circle cx="0" cy="0" r="20"/><path d="M-8 -20L0 -12 8 -20M0 -12V-28"/>
+  </g>
+  <circle cx="140" cy="150" r="3"/><circle cx="160" cy="130" r="2"/><circle cx="380" cy="180" r="3"/><circle cx="60" cy="350" r="2.5"/><circle cx="210" cy="140" r="2"/>
+  <path d="M120 200l6 6-6 6-6-6Z"/><path d="M400 20l5 5-5 5-5-5Z"/>
+</svg>
